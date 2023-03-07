@@ -35,8 +35,8 @@ class Browser:
     directory = []
     savepath = []
 
-    def get_driver(self):
-
+    def get_driver(self) -> None:
+        """Задание настроек для Chrome Webdriver."""
         self.options.add_argument("start-maximized")
         self.options.add_experimental_option("excludeSwitches", ["enable-automation"])
         self.options.add_experimental_option("useAutomationExtension", False)
@@ -52,10 +52,11 @@ class Browser:
             },
         )
         self.driver.set_window_position(-10000, 0)
-        print(self.driver.execute_script("return navigator.userAgent;"))
+        self.driver.execute_script("return navigator.userAgent;")
 
-    def get_data(self, page, category, website_url):
-        self.directory = os.getcwd() + "\\data\\" + category + "\\"
+    def get_data(self, page: int, category: int, website_url: str):
+        """Метод получения данных для выбранной категории и страницы."""
+        self.directory = os.getcwd() + "\\data\\" + str(category) + "\\"
 
         if not os.path.exists(self.directory):
             os.makedirs(self.directory)
@@ -77,12 +78,12 @@ class Browser:
         except Exception as ex:
             logging.info(ex)
 
-    def driver_close(self):
+    def driver_close(self) -> None:
         self.driver.close()
         self.driver.quit()
 
 
-def Soup(category, pages):
+def Soup(category: int, pages: int) -> None:
     titles = []
     ids = []
     barcodes = []
@@ -93,7 +94,7 @@ def Soup(category, pages):
     discounts = []
     for page in range(0, int(pages)):
         with open(
-            os.getcwd() + "\\data\\" + category + "\\page_" + str(page) + ".html",
+            os.getcwd() + "\\data\\" + str(category) + "\\page_" + str(page) + ".html",
             "r",
             encoding="utf-8",
         ) as file:
@@ -111,12 +112,12 @@ def Soup(category, pages):
                     barcode = product["barcode"]["value"]  # штрих-код товара
                     try:
                         brand = product["brand"]["name"]  # название бренда
-                    except Exception:
+                    except ValueError:
                         brand = ""  # название бренда
                         pass
                     try:
                         manufacturer = product["manufacturer"]["name"]  # производитель
-                    except Exception:
+                    except ValueError:
                         manufacturer = ""  # название бренда
                         pass
                     offer_price = product["offer_price"]  # цена со скидкой
@@ -146,7 +147,7 @@ def Soup(category, pages):
         }
     )
     df.to_csv(
-        "data\\" + category + "\\" + category + ".csv",
+        "data\\" + str(category) + "\\" + str(category) + ".csv",
         index=False,
         encoding="utf-8-sig",
     )
