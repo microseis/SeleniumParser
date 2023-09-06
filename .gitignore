@@ -3,7 +3,6 @@
 venv
 data
 session
-config.py
 .idea
 __pycache__/
 *.py[cod]

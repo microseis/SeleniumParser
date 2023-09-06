@@ -1,0 +1,19 @@
+repos:
+-   repo: local
+    hooks:
+    -   id: flake8
+        name: flake8
+        description: flake8 enforcement
+        fail_fast: true
+        entry: flake8
+        args: ["--config=setup.cfg"]
+        language: python
+        types: [python]
+
+    -   id: black
+        name: black
+        description: black enforcement
+        entry: black
+        exclude: ^(data|db|logs)/
+        language: python
+        types: [ python ]
